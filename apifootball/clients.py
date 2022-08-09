@@ -2,7 +2,7 @@ from datetime import date
 import requests
 
 
-ENDPOINT = "https://api-football-v1.p.rapidapi.com/v3/"
+ENDPOINT = "https://api-football-v1.p.rapidapi.com/v3"
 
 
 class Client:
