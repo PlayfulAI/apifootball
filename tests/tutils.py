@@ -1,24 +1,22 @@
 import hashlib
-import json
 import os.path
-import pytest
-import requests
 
+import pytest
+import requests  # noqa: F401
+
+from apifootball.client import APIFootballSession
 
 DATA_ROOT = os.path.join(os.path.dirname(__file__), "data")
 
 
-class MockResponse():
+class MockResponse:
 
     def __init__(self, text):
         self.text = text
 
-    def json(self):
-        return json.loads(self.text)
 
-
-def mock_get(url, params, headers):
-    d = make_digest(url, params)
+def mock_get(self, url, **kwargs):
+    d = make_digest(url, kwargs.get("params", {}))
     with open(os.path.join(DATA_ROOT, "{}.json".format(d)), "rb") as f:
         return MockResponse(f.read())
 
@@ -28,7 +26,7 @@ def patch_get(monkeypatch):
     # Prevent any external request.
     monkeypatch.delattr("requests.sessions.Session.request")
     # Patch the `GET` method.
-    monkeypatch.setattr(requests, "get", mock_get)
+    monkeypatch.setattr(APIFootballSession, "get", mock_get)
 
 
 def make_digest(url, data):

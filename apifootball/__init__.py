@@ -1,1 +1,3 @@
-from .clients import Client
+from .client import APIFootballClient
+
+__all__ = ["APIFootballClient"]
