@@ -14,7 +14,6 @@ class APIFootballSession(requests.Session):
     def __init__(self, key, endpoint):
         super().__init__()
         self.endpoint = endpoint
-        print(endpoint)
         self.headers.update({"x-rapidapi-key": key})
 
     def request(self, method, suffix, *args, **kwargs):

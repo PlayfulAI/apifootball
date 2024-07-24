@@ -1,17 +1,12 @@
-from datetime import date
 from enum import Enum
-from typing import Any, Dict, List
+from typing import Dict, List
 
 from pydantic import AwareDatetime, BaseModel
 
-
-class Venue(BaseModel):
-    id: int
-    name: str
-    city: str
+from .shared import ResponseWrapper
 
 
-class ShortStatusEnum(str, Enum):
+class FixtureShortStatus(str, Enum):
     # Scheduled
     tbd = "TBD"  # Scheduled but date and time are not known
     ns = "NS"  # Not Started
@@ -37,24 +32,13 @@ class ShortStatusEnum(str, Enum):
     wo = "WO"  # Walkover, victory by forfeit or absence of competitor
 
 
-class Status(BaseModel):
+class FixtureStatus(BaseModel):
     long: str
-    short: ShortStatusEnum
+    short: FixtureShortStatus
     elapsed: int | None
 
 
-class FixtureDetails(BaseModel):
-    id: int
-    referee: str | None
-    timezone: str
-    date: AwareDatetime
-    timestamp: int
-    periods: dict
-    venue: Venue
-    status: Status
-
-
-class League(BaseModel):
+class FixtureLeague(BaseModel):
     id: int
     name: str
     country: str
@@ -64,43 +48,36 @@ class League(BaseModel):
     round: str
 
 
-class TeamDetails(BaseModel):
+class FixtureTeam(BaseModel):
     id: int
     name: str
     logo: str
     winner: bool | None = None
 
 
-class TeamDetailsExtended(TeamDetails):
-    code: str
-    country: str
-    founded: int
-    national: bool
+class FixtureTeams(BaseModel):
+    home: FixtureTeam
+    away: FixtureTeam
 
 
-class Teams(BaseModel):
-    home: TeamDetails
-    away: TeamDetails
-
-
-class Score(BaseModel):
+class FixtureScore(BaseModel):
     home: int | None
     away: int | None
 
 
-class Player(BaseModel):
+class FixturePlayer(BaseModel):
     id: int | None
     name: str | None
 
 
-class EventTypeEnum(str, Enum):
+class FixtureEventType(str, Enum):
     goal = "Goal"
     card = "Card"
     subst = "subst"
     var = "Var"
 
 
-class EventDetailEnum(str, Enum):
+class FixtureEventDetail(str, Enum):
     # Type 'Goal'.
     normal_goal = "Normal Goal"
     own_goal = "Own Goal"
@@ -123,82 +100,41 @@ class EventDetailEnum(str, Enum):
     penalty_confirmed = "Penalty confirmed"
 
 
-class Event(BaseModel):
+class FixtureEvent(BaseModel):
     time: Dict[str, int | None]
-    team: TeamDetails
-    player: Player
-    assist: Player
-    type: EventTypeEnum
-    detail: EventDetailEnum
+    team: FixtureTeam
+    player: FixturePlayer
+    assist: FixturePlayer
+    type: FixtureEventType
+    detail: FixtureEventDetail
     comments: str | None
+
+
+class FixtureVenue(BaseModel):
+    id: int
+    name: str
+    city: str
+
+
+class FixtureDetails(BaseModel):
+    id: int
+    referee: str | None
+    timezone: str
+    date: AwareDatetime
+    timestamp: int
+    periods: dict
+    venue: FixtureVenue
+    status: FixtureStatus
 
 
 class Fixture(BaseModel):
     fixture: FixtureDetails
-    league: League
-    teams: Teams
-    goals: Score
-    score: Dict[str, Score]
-    events: List[Event] | None = None
+    league: FixtureLeague
+    teams: FixtureTeams
+    goals: FixtureScore
+    score: Dict[str, FixtureScore]
+    events: List[FixtureEvent] | None = None
 
 
-class BaseWrapper(BaseModel):
-    get: str
-    parameters: Dict[str, Any]
-    errors: list
-    results: int
-    paging: Dict[str, int]
-
-
-class FixturesWrapper(BaseWrapper):
+class FixturesWrapper(ResponseWrapper):
     response: List[Fixture]
-
-
-class Venue(BaseModel):
-    id: int
-    name: str
-    address: str
-    city: str
-    capacity: int
-    surface: str
-    image: str
-
-
-class Team(BaseModel):
-    team: TeamDetailsExtended
-    venue: Venue
-
-
-class TeamsWrapper(BaseWrapper):
-    response: List[Team]
-
-
-class LeagueDetails(BaseModel):
-    id: int
-    name: str
-    type: str
-    logo: str
-
-
-class Country(BaseModel):
-    name: str
-    code: str
-    flag: str
-
-
-class Season(BaseModel):
-    year: int
-    start: date
-    end: date
-    current: bool
-    coverage: dict
-
-
-class League(BaseModel):
-    league: LeagueDetails
-    country: Country
-    seasons: List[Season]
-
-
-class LeaguesWrapper(BaseWrapper):
-    response: List[League]
