@@ -19,9 +19,9 @@ class TeamDetails(BaseModel):
     id: int
     name: str
     logo: str
-    code: str
+    code: str | None
     country: str
-    founded: int
+    founded: int | None
     national: bool
 
 

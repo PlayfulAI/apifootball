@@ -15,8 +15,8 @@ class LeagueDetails(BaseModel):
 
 class LeagueCountry(BaseModel):
     name: str
-    code: str
-    flag: str
+    code: str | None  # `None` when `name == "World"`.
+    flag: str | None  # `None` when `name == "World"`.
 
 
 class LeagueSeason(BaseModel):

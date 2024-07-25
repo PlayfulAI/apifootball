@@ -43,7 +43,7 @@ class FixtureLeague(BaseModel):
     name: str
     country: str
     logo: str
-    flag: str
+    flag: str | None
     season: int
     round: str
 
@@ -56,8 +56,8 @@ class FixtureTeam(BaseModel):
 
 
 class FixtureTeams(BaseModel):
-    home: FixtureTeam
-    away: FixtureTeam
+    home: FixtureTeam | None
+    away: FixtureTeam | None
 
 
 class FixtureScore(BaseModel):
@@ -95,8 +95,11 @@ class FixtureEventDetail(str, Enum):
     substitution_6 = "Substitution 6"
     substitution_7 = "Substitution 7"
     substitution_8 = "Substitution 8"
+    substitution_9 = "Substitution 9"
     # Type 'Var'
     goal_cancelled = "Goal cancelled"
+    goal_confirmed = "Goal confirmed"
+    red_card_cancelled = "Red card cancelled"
     penalty_confirmed = "Penalty confirmed"
 
 
@@ -111,7 +114,7 @@ class FixtureEvent(BaseModel):
 
 
 class FixtureVenue(BaseModel):
-    id: int
+    id: int | None
     name: str
     city: str
 

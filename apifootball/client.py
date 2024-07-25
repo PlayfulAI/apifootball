@@ -71,10 +71,13 @@ class APIFootballClient:
     @validate_call
     def get_leagues(
         self,
-        code: Optional[str],
+        id_: Optional[int] = None,
+        code: Optional[str] = None,
     ) -> LeaguesWrapper:
         """Get leagues."""
         params = dict()
+        if id_ is not None:
+            params["id"] = id_
         if code is not None:
             params["code"] = code
         res = self.sess.get("/leagues", params=params)
