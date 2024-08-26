@@ -101,6 +101,7 @@ class FixtureEventDetail(str, Enum):
     goal_confirmed = "Goal confirmed"
     red_card_cancelled = "Red card cancelled"
     penalty_confirmed = "Penalty confirmed"
+    penalty_cancelled = "Penalty cancelled"
 
 
 class FixtureEvent(BaseModel):
