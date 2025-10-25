@@ -31,6 +31,14 @@ class FixtureShortStatus(str, Enum):
     awd = "AWD"  # Technical loss
     wo = "WO"  # Walkover, victory by forfeit or absence of competitor
 
+    @classmethod
+    def _missing_(cls, value):
+        value = value.lower()
+        for member in cls:
+            if member.lower() == value:
+                return member
+        return None
+
 
 class FixtureStatus(BaseModel):
     long: str
@@ -116,8 +124,8 @@ class FixtureEvent(BaseModel):
 
 class FixtureVenue(BaseModel):
     id: int | None
-    name: str
-    city: str
+    name: str | None
+    city: str | None
 
 
 class FixtureDetails(BaseModel):

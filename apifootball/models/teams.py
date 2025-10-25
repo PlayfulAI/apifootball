@@ -6,13 +6,13 @@ from .shared import ResponseWrapper
 
 
 class TeamVenue(BaseModel):
-    id: int
-    name: str
-    address: str
-    city: str
-    capacity: int
-    surface: str
-    image: str
+    id: int | None
+    name: str | None
+    address: str | None
+    city: str | None
+    capacity: int | None
+    surface: str | None
+    image: str | None
 
 
 class TeamDetails(BaseModel):
@@ -20,7 +20,7 @@ class TeamDetails(BaseModel):
     name: str
     logo: str
     code: str | None
-    country: str
+    country: str | None
     founded: int | None
     national: bool
 
